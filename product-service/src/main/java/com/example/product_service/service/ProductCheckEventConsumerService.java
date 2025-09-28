@@ -1,13 +1,12 @@
 package com.example.product_service.service;
 
+import org.example.enums.StockCheckEventResponseType;
+import org.example.events.PlaceOrderEvent;
+import org.example.events.ProductCheckEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import com.example.product_service.enums.StockCheckEventResponseType;
-import com.example.product_service.event.ProductCheckEvent;
-import com.example.product_service.event.PlaceOrderEvent;
 
 @Service
 public class ProductCheckEventConsumerService {

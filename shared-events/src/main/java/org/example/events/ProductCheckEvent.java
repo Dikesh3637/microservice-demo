@@ -1,10 +1,9 @@
-package com.example.order_service.event;
+package org.example.events;
 
-
-public class ProductCheckEvent{
+public class ProductCheckEvent {
     private String productId;
     private int quantity;
-    
+
     public ProductCheckEvent(String productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;
@@ -24,6 +23,6 @@ public class ProductCheckEvent{
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }   
+    }
 
 }

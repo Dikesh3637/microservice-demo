@@ -1,6 +1,6 @@
-package com.example.order_service.event;
+package org.example.events;
 
-import com.example.order_service.enums.StockCheckEventResponseType;
+import org.example.enums.StockCheckEventResponseType;
 
 public class PlaceOrderEvent {
 
@@ -37,7 +37,5 @@ public class PlaceOrderEvent {
     public void setResponseType(StockCheckEventResponseType responseType) {
         this.responseType = responseType;
     }
-     
 
-    
 }

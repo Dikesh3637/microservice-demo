@@ -2,11 +2,11 @@ package com.example.order_service.service;
 
 import java.util.UUID;
 
+import org.example.enums.StockCheckEventResponseType;
+import org.example.events.PlaceOrderEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import com.example.order_service.enums.StockCheckEventResponseType;
-import com.example.order_service.event.PlaceOrderEvent;
 import com.example.order_service.model.Order;
 
 @Service

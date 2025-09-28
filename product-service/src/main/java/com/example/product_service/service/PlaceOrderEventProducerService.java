@@ -1,9 +1,8 @@
 package com.example.product_service.service;
 
+import org.example.events.PlaceOrderEvent;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import com.example.product_service.event.PlaceOrderEvent;
 
 @Service
 public class PlaceOrderEventProducerService {
