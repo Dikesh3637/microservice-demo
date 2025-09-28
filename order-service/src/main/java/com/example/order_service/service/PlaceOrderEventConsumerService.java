@@ -22,9 +22,10 @@ public class PlaceOrderEventConsumerService {
     public void consume(PlaceOrderEvent placeOrderEvent) {
         if (placeOrderEvent.getResponseType() == StockCheckEventResponseType.INSUFFICIENT_STOCK) {
             System.out.println("Insufficient stock, cannot place order");
+            return;
         }
 
-        Order order = new Order(UUID.fromString(placeOrderEvent.getProductId()), placeOrderEvent.getQuantity(), 0.0);
+        Order order = new Order(UUID.fromString(placeOrderEvent.getProductId()), placeOrderEvent.getQuantity(), 1.0);
         orderService.placeOrder(order);
         System.out.println("Order placed successfully for product: " + placeOrderEvent.getProductId());
     }
