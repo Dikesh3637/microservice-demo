@@ -8,6 +8,10 @@ public class PlaceOrderEvent {
     private int quantity;
     private StockCheckEventResponseType responseType;
 
+    public PlaceOrderEvent() {
+
+    }
+
     public PlaceOrderEvent(String productId, int quantity, StockCheckEventResponseType responseType) {
         this.productId = productId;
         this.quantity = quantity;

@@ -4,6 +4,9 @@ public class ProductCheckEvent {
     private String productId;
     private int quantity;
 
+    public ProductCheckEvent() {
+    }
+
     public ProductCheckEvent(String productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;

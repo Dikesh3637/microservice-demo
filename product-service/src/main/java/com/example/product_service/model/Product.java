@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "products")
@@ -23,12 +24,12 @@ public class Product {
     @Column(nullable = false)
     private String productName;
 
-    @NotBlank
+    @NotNull
     @Min(value = 0, message = "Quantity must be greater than or equal to 0")
     @Column(nullable = false)
     private Integer quantity;
 
-    @NotBlank
+    @NotNull
     @Column(nullable = false)
     @Min(value = 0, message = "Price must be greater than or equal to 0")
     private Integer price;
