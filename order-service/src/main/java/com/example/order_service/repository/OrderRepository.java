@@ -3,9 +3,11 @@ package com.example.order_service.repository;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.example.order_service.model.Order;
 
-public interface OrderRepository extends JpaRepository<Order,UUID>{
-    
+@Repository
+public interface OrderRepository extends JpaRepository<Order, UUID> {
+
 }
