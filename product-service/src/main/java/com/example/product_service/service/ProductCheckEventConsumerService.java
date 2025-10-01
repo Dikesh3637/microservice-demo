@@ -1,5 +1,7 @@
 package com.example.product_service.service;
 
+import java.util.Optional;
+
 import org.example.enums.StockCheckEventResponseType;
 import org.example.events.PlaceOrderEvent;
 import org.example.events.ProductCheckEvent;
@@ -26,11 +28,15 @@ public class ProductCheckEventConsumerService {
     @KafkaListener(topics = "product-check-events", groupId = "product-check-consumer-group")
     public void consumeProductCheckEvent(ProductCheckEvent productEvent) {
         logger.debug("recieved product event" + productEvent);
-        Boolean canPlaceOrder = productService.canPlaceOrder(productEvent.getProductId(), productEvent.getQuantity());
+        Optional<Boolean> canPlaceOrder = productService.canPlaceOrder(productEvent.getProductId(),
+                productEvent.getQuantity());
 
         PlaceOrderEvent productCheckResponseEvent = new PlaceOrderEvent(productEvent.getProductId(),
                 productEvent.getQuantity(),
-                canPlaceOrder ? StockCheckEventResponseType.SUCCESS : StockCheckEventResponseType.INSUFFICIENT_STOCK);
+                canPlaceOrder.isEmpty() ? StockCheckEventResponseType.PRODUCT_NOT_FOUND
+                        : canPlaceOrder.get() ? StockCheckEventResponseType.SUCCESS
+                                : StockCheckEventResponseType.INSUFFICIENT_STOCK);
+
         productEventProducerService.sendProductCheckEventResponse(productCheckResponseEvent);
     }
 }

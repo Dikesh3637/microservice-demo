@@ -25,19 +25,19 @@ public class ProductService {
     }
 
     @Transactional
-    public Boolean canPlaceOrder(String productId, int quantity) {
+    public Optional<Boolean> canPlaceOrder(String productId, int quantity) {
         UUID productUuid = UUID.fromString(productId);
         Optional<Product> productOptional = productRepository.findById(productUuid);
         if (productOptional.isEmpty()) {
-            return false;
+            return Optional.empty();
         }
         Product product = productOptional.get();
         if (product.getQuantity() >= quantity) {
             int currQuant = product.getQuantity();
             product.setQuantity(currQuant - quantity);
             productRepository.save(product);
-            return true;
+            return Optional.of(true);
         }
-        return false;
+        return Optional.of(false);
     }
 }

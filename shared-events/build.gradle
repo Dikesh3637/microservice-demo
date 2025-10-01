@@ -8,6 +8,7 @@
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 group = "org.example"
@@ -27,6 +28,42 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation libs.guava
+
+    //protobuf dependencies
+    api 'io.grpc:grpc-stub:1.58.0'
+    api 'io.grpc:grpc-protobuf:1.58.0'
+    api 'com.google.protobuf:protobuf-java:3.24.4'
+
+    //compile time dep
+    compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+
+}
+
+// protobuf
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.24.4'
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.58.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+//SourceSet
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

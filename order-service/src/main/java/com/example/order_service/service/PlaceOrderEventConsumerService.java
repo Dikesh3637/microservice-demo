@@ -20,6 +20,10 @@ public class PlaceOrderEventConsumerService {
 
     @KafkaListener(topics = "place-order-events", groupId = "place-order-consumer-group")
     public void consume(PlaceOrderEvent placeOrderEvent) {
+        if (placeOrderEvent.getResponseType() == StockCheckEventResponseType.PRODUCT_NOT_FOUND) {
+            System.out.println("product not found");
+            return;
+        }
         if (placeOrderEvent.getResponseType() == StockCheckEventResponseType.INSUFFICIENT_STOCK) {
             System.out.println("Insufficient stock, cannot place order");
             return;
