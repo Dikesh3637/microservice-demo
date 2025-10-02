@@ -36,6 +36,7 @@ public class AuthGrpcService extends AuthServiceImplBase {
 	@Override
 	public void validateToken(ValidationRequest request, StreamObserver<ValidationResponse> responseObserver) {
 		String accessToken = request.getAccessToken();
+		logger.info("Received access token: {}", accessToken);
 
 		// Handle null or empty token
 		if (accessToken == null || accessToken.trim().isEmpty()) {

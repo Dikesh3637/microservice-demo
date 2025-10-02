@@ -34,7 +34,9 @@ public class AuthController {
 		String accessToken = authService.generateAccessToken(loginRequestDto);
 		ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
 				.httpOnly(true)
-				.secure(true)
+				.secure(false)
+				.path("/")
+				.sameSite("Lax")
 				.build();
 
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
