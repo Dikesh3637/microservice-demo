@@ -16,7 +16,7 @@ public class OrderController {
         this.productCheckEventProducer = productCheckEventProducer;
     }
 
-    @PostMapping("/order")
+    @PostMapping("/")
     public void placeOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
         productCheckEventProducer.sendProductCheckEvent(orderRequestDTO.getProductId(), orderRequestDTO.getQuantity());
     }
