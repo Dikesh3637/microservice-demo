@@ -1,6 +1,8 @@
 package com.example.auth_service.controller;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,14 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Void> loginUser(@RequestBody LoginRequestDto loginRequestDto) {
-		return ResponseEntity.ok().build();
+		String accessToken = authService.generateAccessToken(loginRequestDto);
+		ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+				.httpOnly(true)
+				.secure(true)
+				.build();
+
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+
 	}
+
 }

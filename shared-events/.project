@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>shared-events</name>
-	<comment>Project shared_events created by Buildship.</comment>
+	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -22,7 +22,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1759059620647</id>
+			<id>1759333776300</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

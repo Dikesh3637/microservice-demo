@@ -9,6 +9,7 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
     id 'com.google.protobuf' version '0.9.4'
+    id 'eclipse'
 }
 
 group = "org.example"
@@ -59,12 +60,17 @@ protobuf {
 //SourceSet
 sourceSets {
     main {
-        java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/java'
+        resources {
+            srcDirs = ['src/main/proto']
+            include '**/*.proto'
         }
     }
 }
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {

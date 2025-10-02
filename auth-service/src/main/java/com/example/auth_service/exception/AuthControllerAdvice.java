@@ -33,4 +33,14 @@ public class AuthControllerAdvice {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDto);
 	}
 
+	@ExceptionHandler(InvalidRefreshTokenException.class)
+	public ResponseEntity<ErrorResponseDto> InvalidRefreshTokenExceptionHandler(UserWithEmailDoesNotExistException ex) {
+		ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+		errorResponseDto.setStatus(HttpStatus.BAD_REQUEST);
+		errorResponseDto.setMessage(ex.getMessage());
+		errorResponseDto.setTimestamp(System.currentTimeMillis());
+
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDto);
+	}
+
 }

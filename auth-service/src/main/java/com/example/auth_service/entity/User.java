@@ -48,7 +48,7 @@ public class User {
 	private LocalDateTime updatedAt;
 
 	@OneToOne(mappedBy = "user", cascade = { CascadeType.PERSIST,
-			CascadeType.MERGE }, fetch = FetchType.LAZY, orphanRemoval = true)
+			CascadeType.MERGE }, fetch = FetchType.EAGER, orphanRemoval = true)
 	private Token refreshToken;
 
 	public User(UUID userId, String email, String password, String userName) {

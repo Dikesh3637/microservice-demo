@@ -11,10 +11,13 @@ import com.example.auth_service.dto.RegisterRequestDto;
 import com.example.auth_service.dto.RegisterResponseDto;
 import com.example.auth_service.entity.Token;
 import com.example.auth_service.entity.User;
+import com.example.auth_service.enums.TokenExpiryType;
 import com.example.auth_service.exception.EmailAlreadyPresentException;
+import com.example.auth_service.exception.InvalidRefreshTokenException;
 import com.example.auth_service.exception.UserWithEmailDoesNotExistException;
 import com.example.auth_service.repository.UserRepository;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -51,7 +54,7 @@ public class AuthService {
 				"email", requestDto.getEmail(),
 				"userName", requestDto.getUserName());
 
-		String refreshTokenString = jwtUtilService.generateRefreshToken(claims);
+		String refreshTokenString = jwtUtilService.generateToken(claims, TokenExpiryType.REFRESH_TOKEN);
 
 		userToBeSaved.setPassword(encodedPassword);
 
@@ -74,6 +77,22 @@ public class AuthService {
 		}
 
 		User user = userOptional.get();
+		Token refreshToken = user.getRefreshToken();
+		String refreshTokenString = refreshToken.getRefreshToken();
 
+		try {
+			jwtUtilService.validateToken(refreshTokenString);
+		} catch (JwtException ex) {
+			throw new InvalidRefreshTokenException("the refresh token is invalid : relogin again");
+		}
+
+		Map<String, String> claims = Map.of(
+				"email", user.getEmail(),
+				"userName", user.getUserName(),
+				"userId", user.getUserId().toString());
+
+		String accessToken = jwtUtilService.generateToken(claims, TokenExpiryType.ACCESS_TOKEN);
+
+		return accessToken;
 	}
 }
