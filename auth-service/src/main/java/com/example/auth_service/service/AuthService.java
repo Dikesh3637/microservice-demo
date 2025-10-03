@@ -1,5 +1,6 @@
 package com.example.auth_service.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -13,11 +14,10 @@ import com.example.auth_service.entity.Token;
 import com.example.auth_service.entity.User;
 import com.example.auth_service.enums.TokenExpiryType;
 import com.example.auth_service.exception.EmailAlreadyPresentException;
-import com.example.auth_service.exception.InvalidRefreshTokenException;
+import com.example.auth_service.exception.InvalidCredentialsException;
 import com.example.auth_service.exception.UserWithEmailDoesNotExistException;
 import com.example.auth_service.repository.UserRepository;
 
-import io.jsonwebtoken.JwtException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -50,7 +50,7 @@ public class AuthService {
 		userToBeSaved.setEmail(requestDto.getEmail());
 		userToBeSaved.setUserName(requestDto.getUserName());
 
-		Map<String, String> claims = Map.of(
+		Map<String, Object> claims = Map.of(
 				"email", requestDto.getEmail(),
 				"userName", requestDto.getUserName());
 
@@ -68,28 +68,45 @@ public class AuthService {
 		return new RegisterResponseDto(savedUser.getEmail(), savedUser.getUserName());
 	}
 
-	public String generateAccessToken(LoginRequestDto loginRequestDto) {
+	public String generateAccessTokenOnLogin(LoginRequestDto loginRequestDto) {
 		// check if the password is correct
 		Optional<User> userOptional = userRepository.findByEmail(loginRequestDto.getEmail());
+
 		if (userOptional.isEmpty()) {
 			throw new UserWithEmailDoesNotExistException(
 					"the user with email : " + loginRequestDto.getEmail() + " does not exist");
 		}
 
-		User user = userOptional.get();
-		Token refreshToken = user.getRefreshToken();
-		String refreshTokenString = refreshToken.getRefreshToken();
-
-		try {
-			jwtUtilService.validateToken(refreshTokenString);
-		} catch (JwtException ex) {
-			throw new InvalidRefreshTokenException("the refresh token is invalid : relogin again");
+		if (!passwordEncoder.matches(loginRequestDto.getPassword(), userOptional.get().getPassword())) {
+			throw new InvalidCredentialsException("the password is incorrect");
 		}
 
-		Map<String, String> claims = Map.of(
+		User user = userOptional.get();
+
+		Map<String, Object> refreshTokenClaims = Map.of(
+				"email", user.getEmail(),
+				"userName", user.getUserName());
+
+		// generate a new refresh token and save it with the user
+		Token newRefreshToken = new Token();
+		String newRefreshTokenString = jwtUtilService.generateToken(refreshTokenClaims, TokenExpiryType.REFRESH_TOKEN);
+
+		newRefreshToken.setRefreshToken(newRefreshTokenString);
+		newRefreshToken.setUser(user);
+		user.setRefreshToken(newRefreshToken);
+
+		userRepository.save(user);
+
+		List<String> roles = List.of("USER");
+		if (user.getIsAdmin()) {
+			roles.add("ADMIN");
+		}
+
+		Map<String, Object> claims = Map.of(
 				"email", user.getEmail(),
 				"userName", user.getUserName(),
-				"userId", user.getUserId().toString());
+				"userId", user.getUserId().toString(),
+				"roles", roles);
 
 		String accessToken = jwtUtilService.generateToken(claims, TokenExpiryType.ACCESS_TOKEN);
 

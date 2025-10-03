@@ -33,7 +33,7 @@ public class JwtUtilsService {
 		return Keys.hmacShaKeyFor(jwtSecretString.getBytes(StandardCharsets.UTF_8));
 	}
 
-	public String generateToken(Map<String, String> claims, TokenExpiryType expiryType) {
+	public String generateToken(Map<String, Object> claims, TokenExpiryType expiryType) {
 		Date now = new Date();
 		Date exp = new Date(System.currentTimeMillis() + tokenExpiryTimeMap.get(expiryType));
 
@@ -79,7 +79,7 @@ public class JwtUtilsService {
 		String userId = extractClaim(accessToken, "userId");
 		String userName = extractClaim(accessToken, "userName");
 
-		Map<String, String> claims = Map.of(
+		Map<String, Object> claims = Map.of(
 				"email", email,
 				"userId", userId,
 				"userName", userName);

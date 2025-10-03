@@ -43,4 +43,14 @@ public class AuthControllerAdvice {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDto);
 	}
 
+	@ExceptionHandler(InvalidCredentialsException.class)
+	public ResponseEntity<ErrorResponseDto> InvalidCredentialsExceptionHandler(UserWithEmailDoesNotExistException ex) {
+		ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+		errorResponseDto.setStatus(HttpStatus.UNAUTHORIZED);
+		errorResponseDto.setMessage(ex.getMessage());
+		errorResponseDto.setTimestamp(System.currentTimeMillis());
+
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponseDto);
+	}
+
 }

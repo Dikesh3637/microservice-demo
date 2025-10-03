@@ -1,5 +1,6 @@
 package com.example.auth_service.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -100,7 +101,7 @@ public class AuthGrpcService extends AuthServiceImplBase {
 						.setIsRefreshed(false)
 						.build();
 				sendValidateTokenResponse(responseObserver, validationResponse);
-				return; // CRITICAL: Must return here
+				return;
 			}
 
 			Optional<User> userOptional = userRepository.findByEmail(email);
@@ -142,10 +143,16 @@ public class AuthGrpcService extends AuthServiceImplBase {
 				return;
 			}
 
-			Map<String, String> newAccessTokenClaims = Map.of(
+			List<String> roles = List.of("USER");
+			if (user.getIsAdmin()) {
+				roles.add("ADMIN");
+			}
+
+			Map<String, Object> newAccessTokenClaims = Map.of(
 					"email", user.getEmail(),
 					"userId", user.getUserId().toString(),
-					"userName", user.getUserName());
+					"userName", user.getUserName(),
+					"roles", roles);
 
 			String refreshedAccessToken = jwtUtilsService.generateToken(newAccessTokenClaims,
 					TokenExpiryType.ACCESS_TOKEN);

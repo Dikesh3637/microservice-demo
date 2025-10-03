@@ -41,6 +41,10 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 
+	@NotBlank
+	@Column(nullable = false)
+	private Boolean isAdmin = false;
+
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
@@ -116,6 +120,14 @@ public class User {
 
 	public void setRefreshToken(Token refreshToken) {
 		this.refreshToken = refreshToken;
+	}
+
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 
 }

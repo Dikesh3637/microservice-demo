@@ -9,5 +9,4 @@ import com.example.product_service.model.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-
 }

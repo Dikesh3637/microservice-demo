@@ -25,19 +25,6 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
 	@Override
 	public GatewayFilter apply(Object config) {
 		return (exchange, chain) -> {
-			// System.out.println("=================================");
-			// System.out.println("=== JwtValidation Filter START ===");
-			// System.out.println("Request Path: " + exchange.getRequest().getPath());
-			// System.out.println("Request Method: " + exchange.getRequest().getMethod());
-			//
-			// // Print ALL cookies
-			// var cookies = exchange.getRequest().getCookies();
-			// System.out.println("Total cookies received: " + cookies.size());
-			// cookies.forEach((name, cookieList) -> {
-			// cookieList.forEach(cookie -> {
-			// System.out.println(" Cookie: " + name + " = " + cookie.getValue());
-			// });
-			// });
 
 			HttpCookie accessTokenCookie = exchange.getRequest().getCookies().getFirst("accessToken");
 

@@ -31,7 +31,7 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<Void> loginUser(@RequestBody LoginRequestDto loginRequestDto) {
-		String accessToken = authService.generateAccessToken(loginRequestDto);
+		String accessToken = authService.generateAccessTokenOnLogin(loginRequestDto);
 		ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
 				.httpOnly(true)
 				.secure(false)

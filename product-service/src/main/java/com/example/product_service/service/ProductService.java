@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.example.product_service.exception.ProductNotFoundException;
 import com.example.product_service.model.Product;
 import com.example.product_service.repository.ProductRepository;
 
@@ -39,5 +40,14 @@ public class ProductService {
             return Optional.of(true);
         }
         return Optional.of(false);
+    }
+
+    public Product getProductById(String id) {
+        Optional<Product> productOptional = productRepository.findById(UUID.fromString(id));
+        if (productOptional.isEmpty()) {
+            throw new ProductNotFoundException("the product with the id : " + id + " does not exist ");
+        }
+
+        return productOptional.get();
     }
 }
