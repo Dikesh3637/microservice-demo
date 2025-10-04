@@ -17,6 +17,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -41,7 +42,7 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 
-	@NotBlank
+	@NotNull
 	@Column(nullable = false)
 	private Boolean isAdmin = false;
 

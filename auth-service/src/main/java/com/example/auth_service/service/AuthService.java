@@ -1,5 +1,6 @@
 package com.example.auth_service.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,7 +98,8 @@ public class AuthService {
 
 		userRepository.save(user);
 
-		List<String> roles = List.of("USER");
+		List<String> roles = new ArrayList<>();
+		roles.add("USER");
 		if (user.getIsAdmin()) {
 			roles.add("ADMIN");
 		}

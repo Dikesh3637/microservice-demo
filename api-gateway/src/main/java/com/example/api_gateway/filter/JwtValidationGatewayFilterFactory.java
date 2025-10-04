@@ -59,6 +59,8 @@ public class JwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
 											.build());
 						}
 
+						// set the user roles from the token;
+
 						return chain.filter(exchange);
 					})
 					.onErrorResume(e -> {
